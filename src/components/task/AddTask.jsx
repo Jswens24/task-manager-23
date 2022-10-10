@@ -4,17 +4,36 @@ import ListDisplay from './ListDisplay';
 const AddTask = () => {
     const [input, setInput] = useState('');
     const [list, setList] = useState([]);
+    const [category, setCategory] = useState('');
 
     const handleClick = (e) => {
-        setList([...list, input]);
+        setList([...list, {
+            task: input,
+            category: category
+        }]);
+        setInput('')
+    };
+
+    const deleteTask = (index) => {
+        const newState = list;
+        newState.splice(index, 1);
+        setList([...newState]);
     };
 
     return (
         <div>
             <h1>Add Task</h1>
-            <input type='text' placeholder='add task' onChange={(e) => setInput(e.target.value)} />
-            <button onClick={handleClick}>Add Task</button>
-            <ListDisplay list={list} />
+            <div className="task-form">
+                <input type='text' value={input} placeholder='Add task' onChange={(e) => setInput(e.target.value)} />
+                <select onChange={(e) => setCategory(e.target.value)}>
+                    <option selected disabled defaultValue >Category</option>
+                    <option value='Personal'>Personal</option>
+                    <option value='Work'>Work</option>
+                    <option value='Errands'>Errands</option>
+                </select>
+                <button onClick={handleClick}>Add Task</button>
+            </div>
+            <ListDisplay deleteTask={deleteTask} list={list} />
         </div>
     )
 };
